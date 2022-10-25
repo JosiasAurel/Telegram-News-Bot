@@ -1,6 +1,7 @@
 from telethon.sync import TelegramClient
 import json
 import requests
+from deta import app
 
 HN_BASE_URL = "https://hacker-news.firebaseio.com/v0"
 
@@ -23,16 +24,18 @@ with open("config.json", "r") as config_json:
 api_id = json_content.get("api_id")
 api_hash = json_content.get("api_hash")
 
-with TelegramClient("name", api_id, api_hash) as client:
-    posts = fetch_posts()
-    # time to send all those messages
-    client.send_message("me", "Good morning, Master. \nHere is your daily dose of Hacker News")
-    for post in posts:
-        message = f"""
-            {post.get("title")}            
-            Posted by {post.get("by")}
-            More -> {post.get("url")}
-        """
-        client.send_message("me", message)
-    client.send_message("me", "That's it for today.")
-    client.disconnect()
+@app.lib.cron()
+def news_man(event):
+    with TelegramClient("name", api_id, api_hash) as client:
+        posts = fetch_posts()
+        # time to send all those messages
+        client.send_message("me", "Good morning, Master. \nHere is your daily dose of Hacker News")
+        for post in posts:
+            message = f"""
+                {post.get("title")}            
+                Posted by {post.get("by")}
+                More -> {post.get("url")}
+            """
+            client.send_message("me", message)
+        client.send_message("me", "That's it for today.")
+        client.disconnect()
