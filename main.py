@@ -46,3 +46,4 @@ def _root():
             client.send_message("me", message)
             client.send_message("me", "That's it for today.")
             client.disconnect()
+    return "Sending juice your way"
