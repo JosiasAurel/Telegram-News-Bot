@@ -1,3 +1,6 @@
 *.session
+*.logs
 config.json
 .deta
+.vercel
+vercel.json
