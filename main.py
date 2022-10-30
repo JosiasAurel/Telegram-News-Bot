@@ -2,6 +2,7 @@ from telethon.client import TelegramClient
 import json
 import requests
 from fastapi import FastAPI
+import uvicorn
 
 app = FastAPI()
 
@@ -47,3 +48,5 @@ async def _root():
     await client.send_message("me", "That's it for today.")
     return "Sending juice your way"
 
+if __name__ == "__main__":
+    uvicorn.run("main:app", host="0.0.0.0")
